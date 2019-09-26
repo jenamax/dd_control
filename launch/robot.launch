@@ -1,0 +1,16 @@
+<launch>
+    <param name="robot_description" textfile="/home/evgenii/catkin_ws/src/dd_control/urdf/dd.urdf" />
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model dd_model -param robot_description -y -6"/>
+    
+    <!-- load the controllers -->
+    <rosparam file="/home/evgenii/catkin_ws/src/dd_control/config/config.yaml" command="load" ns="dd_controller"/>
+    <node name="controller_spawner" pkg ="controller_manager" type="spawner" ns="/dd_model" args="dd_cntroller"/>
+    
+    <!-- converts joint states to TF transforms -->
+
+    
+    <node name="gazebo" pkg ="gazebo_ros" type="gazebo" />
+  <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+    <param name="default_topic" value="/cmd_vel"/>
+  </node>
+</launch>

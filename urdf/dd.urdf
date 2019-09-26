@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<robot name="dd_model">
+    
+      <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/</robotNamespace>
+        </plugin>
+    </gazebo>
+    
+   <material name="red">
+        <color rgba="0 1 0.8 1"/>
+    </material>  
+    
+    <material name="blue">
+        <color rgba="1 0 0.8 1"/>
+    </material> 
+    
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="1 0.5 0.1"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <inertial>
+        <mass value="0.5" />
+        <inertia ixx="0.04" ixy="0.0" ixz="0.0" iyy="0.04" iyz="0.0" izz="0.02"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <box size="1 0.1 0.2" />
+      </geometry>
+        </collision>
+  </link>
+
+  <link name="wheel1">
+    <visual>
+      <geometry>
+        <cylinder radius="0.2" length="0.2"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <inertial>
+        <mass value="0.1" />
+        <inertia ixx="0.04" ixy="0.0" ixz="0.0" iyy="0.04" iyz="0.0" izz="0.02"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <cylinder radius="0.2" length="0.2" />
+      </geometry>
+        </collision>
+  </link>
+  
+  <link name="wheel2">
+    <visual>
+      <geometry>
+        <cylinder radius="0.2" length="0.2"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <inertial>
+        <mass value="0.1" />
+        <inertia ixx="0.04" ixy="0.0" ixz="0.0" iyy="0.04" iyz="0.0" izz="0.02"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <cylinder radius="0.2" length="0.2" />
+      </geometry>
+        </collision>
+  </link>
+
+  <joint name="base_to_wheel1" type="continuous">
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <parent link="base_link"/>
+    <child link="wheel1"/>
+    <origin rpy="1.57 0 0" xyz="0.5 -0.25 0"/>
+    <limit effort="30" velocity="1.0"/>
+  </joint>
+  
+  <joint name="base_to_wheel2" type="continuous">
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <parent link="base_link"/>
+    <child link="wheel2"/>
+    <origin rpy="1.57 0 0" xyz="0.5 0.25 0"/>
+    <limit effort="30" velocity="1.0"/>
+  </joint>
+  
+  <transmission name="wheel1_tr" >
+    <type> transmission_interface/SimpleTransmission </type>
+        <actuator name="motor1">
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    <joint name="base_to_wheel1">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+  </transmission>  
+  
+  <transmission name="wheel2_tr">
+    <type> transmission_interface/SimpleTransmission </type>
+        <actuator name="motor1">
+            <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+    <joint name="base_to_wheel2">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+  </transmission>  
+
+</robot>

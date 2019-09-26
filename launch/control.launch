@@ -1,0 +1,17 @@
+ 
+<launch>
+    <param name="robot_description" textfile="/home/evgenii/catkin_ws/src/dd_control/urdf/dd.urdf" />
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model dd_model -param robot_description -y -6"/>
+    
+    <!-- load the controllers -->
+    <rosparam file="/home/evgenii/catkin_ws/src/dd_control/config/config.yaml" command="load" ns="dd_controller"/>
+    <node name="controller_spawner" pkg ="controller_manager" type="spawner" ns="/dd_model" args="dd_cntroller"/>
+    
+    <!-- converts joint states to TF transforms -->
+
+    
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="paused" value="false"/>
+  </include>
+  <node name="dd_control" pkg="dd_control" type="control.py"> </node>
+</launch>
