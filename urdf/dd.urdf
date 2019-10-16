@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot name="dd_model">
     
-      <gazebo>
+    <gazebo>
         <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
             <robotNamespace>/</robotNamespace>
         </plugin>
@@ -23,7 +23,7 @@
       <material name="blue"/>
     </visual>
     <inertial>
-        <mass value="0.5" />
+        <mass value="5" />
         <inertia ixx="0.04" ixy="0.0" ixz="0.0" iyy="0.04" iyz="0.0" izz="0.02"/>
     </inertial>
     <collision>
@@ -41,7 +41,7 @@
       <material name="red"/>
     </visual>
     <inertial>
-        <mass value="0.1" />
+        <mass value="1" />
         <inertia ixx="0.04" ixy="0.0" ixz="0.0" iyy="0.04" iyz="0.0" izz="0.02"/>
     </inertial>
     <collision>
@@ -59,7 +59,7 @@
       <material name="red"/>
     </visual>
     <inertial>
-        <mass value="0.1" />
+        <mass value="1" />
         <inertia ixx="0.04" ixy="0.0" ixz="0.0" iyy="0.04" iyz="0.0" izz="0.02"/>
     </inertial>
     <collision>
@@ -74,7 +74,7 @@
     <parent link="base_link"/>
     <child link="wheel1"/>
     <origin rpy="1.57 0 0" xyz="0.5 -0.25 0"/>
-    <limit effort="30" velocity="1.0"/>
+    <limit effort="5000" velocity="10.0"/>
   </joint>
   
   <joint name="base_to_wheel2" type="continuous">
@@ -82,16 +82,16 @@
     <parent link="base_link"/>
     <child link="wheel2"/>
     <origin rpy="1.57 0 0" xyz="0.5 0.25 0"/>
-    <limit effort="30" velocity="1.0"/>
+    <limit effort="5000" velocity="10.0"/>
   </joint>
   
-  <transmission name="wheel1_tr" >
+  <transmission name="wheel1_tr">
     <type> transmission_interface/SimpleTransmission </type>
         <actuator name="motor1">
             <mechanicalReduction>1</mechanicalReduction>
         </actuator>
     <joint name="base_to_wheel1">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </joint>
   </transmission>  
   
@@ -101,8 +101,25 @@
             <mechanicalReduction>1</mechanicalReduction>
      </actuator>
     <joint name="base_to_wheel2">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </joint>
   </transmission>  
 
+  
+  <gazebo reference="wheel1">
+    <mu1 value="200.0"/>
+    <mu2 value="100.0"/>
+    <kp value="10000000.0" />
+    <kd value="1.0" />
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  
+  <gazebo reference="wheel2">
+    <mu1 value="200.0"/>
+    <mu2 value="100.0"/>
+    <kp value="10000000.0" />
+    <kd value="1.0" />
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  
 </robot>

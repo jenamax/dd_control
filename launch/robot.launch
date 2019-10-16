@@ -1,16 +1,25 @@
 <launch>
-    <param name="robot_description" textfile="/home/evgenii/catkin_ws/src/dd_control/urdf/dd.urdf" />
-    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model dd_model -param robot_description -y -6"/>
+    <arg name="model" default="/home/evgenii/catkin_ws/src/dd_control/urdf/dd.urdf"/>
+    <arg name="rvizconfig" default="/home/evgenii/catkin_ws/src/dd_control/rviz/urdf.rviz" />
+    
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model dd_model -param robot_description -y 0 -x 0 -z 0"/>
     
     <!-- load the controllers -->
-    <rosparam file="/home/evgenii/catkin_ws/src/dd_control/config/config.yaml" command="load" ns="dd_controller"/>
-    <node name="controller_spawner" pkg ="controller_manager" type="spawner" ns="/dd_model" args="dd_cntroller"/>
+    <rosparam command="load" file="/home/evgenii/catkin_ws/src/dd_control/config/dd.yaml" ns="dd_controller"/>
+    <node name="dd_controller_spawner" pkg ="controller_manager" type="spawner" output="screen" args="dd_controller" />
     
     <!-- converts joint states to TF transforms -->
 
+    <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher">
+        <param name="publish_frequency" type="double" value="30.0" />
+    </node>
     
+    <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+        <param name="default_topic" value="/dd_controller/cmd_vel"/>
+    </node>
+        
     <node name="gazebo" pkg ="gazebo_ros" type="gazebo" />
-  <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
-    <param name="default_topic" value="/cmd_vel"/>
-  </node>
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
 </launch>
