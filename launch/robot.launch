@@ -1,6 +1,7 @@
 <launch>
-    <arg name="model" default="/home/evgenii/catkin_ws/src/dd_control/urdf/dd.urdf"/>
-    <arg name="rvizconfig" default="/home/evgenii/catkin_ws/src/dd_control/rviz/urdf.rviz" />
+    <arg name="catkin" default="/home/evgenii/catkin_ws"/>
+    <arg name="model" default="$(arg catkin)/src/dd_control/urdf/dd.urdf"/>
+    <arg name="rvizconfig" default="$(arg catkin)/src/dd_control/rviz/urdf.rviz" />
     <arg name="paused" default="false"/>
     <arg name="use_sim_time" default="true"/>
     <arg name="gui" default="true"/>
@@ -11,18 +12,10 @@
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model dd_model -param robot_description -y 0 -x 0 -z 0"/>
     
     <!-- load the controllers -->
-    <rosparam command="load" file="/home/evgenii/catkin_ws/src/dd_control/config/dd.yaml" ns="dd_controller"/>
+    <rosparam command="load" file="$(arg catkin)/src/dd_control/config/dd.yaml" ns="dd_controller"/>
     <node name="dd_controller_spawner" pkg ="controller_manager" type="spawner" output="screen" args="dd_controller" />
     
     <!-- converts joint states to TF transforms -->
-
-    <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher">
-        <param name="publish_frequency" type="double" value="30.0" />
-    </node>
-    
-    <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
-        <param name="default_topic" value="/dd_controller/cmd_vel"/>
-    </node>
         
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="debug" value="$(arg debug)" />

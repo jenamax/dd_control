@@ -1,16 +1,6 @@
  
 <launch>
-    <param name="default_topic" value="/cmd_vel"/>
-    <param name="robot_description" textfile="/home/evgenii/catkin_ws/src/dd_control/urdf/dd.urdf" />
-    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model dd_model -param robot_description -y -6"/>
-    
-    <!-- load the controllers -->
-    <rosparam file="/home/evgenii/catkin_ws/src/dd_control/config/dd.yaml" command="load" ns="dd_controller"/>
-    <node name="controller_spawner" pkg ="controller_manager" type="spawner" ns="/dd_model" args="dd_cntroller"/>
-    
-    <!-- converts joint states to TF transforms -->
-
-    
-    <node name="gazebo" pkg ="gazebo_ros" type="gazebo" />
-  <node name="dd_control" pkg="dd_control" type="control.py"> </node>
+     <arg name="catkin" default="/home/evgenii/catkin_ws"/>
+     <include file="$(arg catkin)/src/dd_control/launch/robot.launch"> </include>
+    <node name="dd_control" pkg="dd_control" type="control.py"> </node>
 </launch>

@@ -2,8 +2,8 @@
 type: "diff_drive_controller/DiffDriveController"
 publish_rate: 50
 
-left_wheel: 'base_to_wheel1'
-right_wheel: 'base_to_wheel2'
+left_wheel: ['base_to_wheel1']
+right_wheel: ['base_to_wheel2']
 
 wheel_separation: 0.5
 wheel_radius : 0.2  
@@ -23,7 +23,7 @@ linear:
         has_velocity_limits    : true
         max_velocity           : 10   # m/s
         has_acceleration_limits: true
-        max_acceleration       : 100# m/s^2
+        max_acceleration       : 100 # m/s^2
 angular:
     z:
         has_velocity_limits    : true
